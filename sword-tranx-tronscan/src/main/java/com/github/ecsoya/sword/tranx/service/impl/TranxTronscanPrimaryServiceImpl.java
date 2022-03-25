@@ -9,12 +9,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.ecsoya.sword.tranx.config.TronscanConfig;
+import com.github.ecsoya.sword.tranx.domain.TranxBase;
 import com.github.ecsoya.sword.tranx.domain.TranxSymbol;
+import com.github.ecsoya.sword.tranx.domain.TranxTrc20;
 import com.github.ecsoya.sword.tranx.domain.TranxTronscan;
+import com.github.ecsoya.sword.tranx.domain.TranxTrx;
 import com.github.ecsoya.sword.tranx.domain.Tronscan;
 import com.github.ecsoya.sword.tranx.service.ITranxScanService;
 import com.github.ecsoya.sword.tranx.service.ITranxSymbolService;
+import com.github.ecsoya.sword.tranx.service.ITranxTrc20Service;
 import com.github.ecsoya.sword.tranx.service.ITranxTronscanService;
 import com.github.ecsoya.sword.tranx.util.HttpClientUtil;
 
@@ -38,6 +43,9 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 	@Autowired
 	private ITranxTronscanService tranxTronscanService;
 
+	@Autowired
+	private ITranxTrc20Service tranxTrc20Service;
+
 	@Override
 	public int scanTranx(TranxSymbol symbol) {
 		if (symbol == null || !Objects.equals(TOKEN_TRX, symbol.getToken())) {
@@ -45,11 +53,7 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 		}
 		log.info("TronScan: {}", TOKEN_TRX);
 		String baseUrl = config.getBaseUrl();
-		String path = config.getPath();
-		return loadTranx(baseUrl, path, symbol);
-	}
-
-	private int loadTranx(String baseUrl, String path, TranxSymbol symbol) {
+		String path = config.getTransaction();
 		log.info("TronScan: {}", baseUrl + path);
 		Long start = symbol.getBlockNumber();
 		int maxTries = 0;
@@ -102,6 +106,10 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 							tranx.setDecimals(TRX_DECIMALS);
 						}
 						tranxTronscanService.insertTranxTronscan(tranx);
+
+						// if (Objects.equals(symbol.getAddress(), tranx.getToAddress())) {
+						loadTrc20(tranx.getHash());
+						// }
 					}
 				}
 				return Long.valueOf(result.length);
@@ -111,6 +119,41 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 			log.error("TronScan error", e);
 			return BLOCK_FAILED;
 		}
+	}
+
+	private void loadTrc20(String hash) {
+		log.info("TrxTranx: {}", hash);
+		try {
+			String baseUrl = config.getBaseUrl();
+			String path = config.getTransactionInfo();
+			Map<String, String> params = new HashMap<>();
+			params.put("hash", hash);
+			String json = HttpClientUtil.doGet(baseUrl + path, params);
+			log.info("TrxTranx: {}", json);
+			TranxTrx trx = JSON.parseObject(json, TranxTrx.class);
+			if (trx != null && trx.getTrc20TransferInfo() != null) {
+				TranxTrc20[] transfers = trx.getTrc20TransferInfo();
+				for (TranxTrc20 transfer : transfers) {
+					transfer.setHash(hash);
+					tranxTrc20Service.insertTranxTrc20(transfer);
+				}
+			}
+		} catch (Exception e) {
+			log.error("TrxTranx error", e);
+		}
+	}
+
+	@Override
+	public TranxBase getTranxByHash(String hash) {
+		if (hash == null || hash.equals("")) {
+			return null;
+		}
+		TranxTrc20 value = tranxTrc20Service.selectTranxTrc20ById(hash);
+		if (value != null) {
+			return value;
+		}
+		loadTrc20(hash);
+		return tranxTrc20Service.selectTranxTrc20ById(hash);
 	}
 
 }

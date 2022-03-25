@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.ecsoya.sword.tranx.mapper.TranxTrc20Mapper">
+    
+    <resultMap type="com.github.ecsoya.sword.tranx.domain.TranxTrc20" id="TranxTrc20Result">
+        <result property="hash"    column="hash"    />
+        <result property="symbol"    column="symbol"    />
+        <result property="level"    column="level"    />
+        <result property="decimals"    column="decimals"    />
+        <result property="name"    column="name"    />
+        <result property="fromAddress"    column="from_address"    />
+        <result property="toAddress"    column="to_address"    />
+        <result property="amountStr"    column="amount_str"    />
+        <result property="type"    column="type"    />
+        <result property="contractAddress"    column="contract_address"    />
+    </resultMap>
+
+    <sql id="selectTranxTrc20Vo">
+        select a.hash, a.symbol, a.level, a.decimals, a.name, a.from_address, a.to_address, a.amount_str, a.type, a.contract_address 
+    
+    </sql>
+    
+    <sql id="selectTranxTrc20Joins">
+	
+	</sql>
+
+    <select id="selectTranxTrc20List" parameterType="com.github.ecsoya.sword.tranx.domain.TranxTrc20" resultMap="TranxTrc20Result">
+        <include refid="selectTranxTrc20Vo"/>
+        from tx_tranx_trc20 a
+        <include refid="selectTranxTrc20Joins"/>
+        <where>  
+            <if test="symbol != null  and symbol != ''"> and a.symbol = #{symbol}</if>
+            <if test="level != null  and level != ''"> and a.level = #{level}</if>
+            <if test="decimals != null "> and a.decimals = #{decimals}</if>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="fromAddress != null  and fromAddress != ''"> and a.from_address = #{fromAddress}</if>
+            <if test="toAddress != null  and toAddress != ''"> and a.to_address = #{toAddress}</if>
+            <if test="amountStr != null  and amountStr != ''"> and a.amount_str = #{amountStr}</if>
+            <if test="type != null  and type != ''"> and a.type = #{type}</if>
+            <if test="contractAddress != null  and contractAddress != ''"> and a.contract_address = #{contractAddress}</if>
+        </where>
+    </select>
+    
+    <select id="selectTranxTrc20ById" parameterType="String" resultMap="TranxTrc20Result">
+        <include refid="selectTranxTrc20Vo"/>
+        from tx_tranx_trc20 a
+        <include refid="selectTranxTrc20Joins"/>
+        where hash = #{hash}
+    </select>
+        
+    <insert id="insertTranxTrc20" parameterType="com.github.ecsoya.sword.tranx.domain.TranxTrc20">
+        insert into tx_tranx_trc20
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="hash != null">hash,</if>
+            <if test="symbol != null">symbol,</if>
+            <if test="level != null">level,</if>
+            <if test="decimals != null">decimals,</if>
+            <if test="name != null">name,</if>
+            <if test="fromAddress != null">from_address,</if>
+            <if test="toAddress != null">to_address,</if>
+            <if test="amountStr != null">amount_str,</if>
+            <if test="type != null">type,</if>
+            <if test="contractAddress != null">contract_address,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="hash != null">#{hash},</if>
+            <if test="symbol != null">#{symbol},</if>
+            <if test="level != null">#{level},</if>
+            <if test="decimals != null">#{decimals},</if>
+            <if test="name != null">#{name},</if>
+            <if test="fromAddress != null">#{fromAddress},</if>
+            <if test="toAddress != null">#{toAddress},</if>
+            <if test="amountStr != null">#{amountStr},</if>
+            <if test="type != null">#{type},</if>
+            <if test="contractAddress != null">#{contractAddress},</if>
+         </trim>
+         on duplicate key update
+         <trim prefix="" suffixOverrides=",">
+            <if test="symbol != null">symbol = #{symbol},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="decimals != null">decimals = #{decimals},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="fromAddress != null">from_address = #{fromAddress},</if>
+            <if test="toAddress != null">to_address = #{toAddress},</if>
+            <if test="amountStr != null">amount_str = #{amountStr},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="contractAddress != null">contract_address = #{contractAddress},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTranxTrc20" parameterType="com.github.ecsoya.sword.tranx.domain.TranxTrc20">
+        update tx_tranx_trc20
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="symbol != null">symbol = #{symbol},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="decimals != null">decimals = #{decimals},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="fromAddress != null">from_address = #{fromAddress},</if>
+            <if test="toAddress != null">to_address = #{toAddress},</if>
+            <if test="amountStr != null">amount_str = #{amountStr},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="contractAddress != null">contract_address = #{contractAddress},</if>
+        </trim>
+        where hash = #{hash}
+    </update>
+
+    <delete id="deleteTranxTrc20ById" parameterType="String">
+        delete from tx_tranx_trc20 where hash = #{hash}
+    </delete>
+
+    <delete id="deleteTranxTrc20ByIds" parameterType="String">
+        delete from tx_tranx_trc20 where hash in 
+        <foreach item="hash" collection="array" open="(" separator="," close=")">
+            #{hash}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -8,9 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class TronscanConfig {
 	private String baseUrl = "https://apilist.tronscan.org/api/";
 
-	private String path = "transaction";
-
-	private String[] apiKeys;
+	private String transaction = "transaction";
+	private String transactionInfo = "transaction-info";
 
 	public String getBaseUrl() {
 		return baseUrl;
@@ -20,19 +19,19 @@ public class TronscanConfig {
 		this.baseUrl = baseUrl;
 	}
 
-	public String[] getApiKeys() {
-		return apiKeys;
+	public String getTransaction() {
+		return transaction;
 	}
 
-	public void setApiKeys(String[] apiKeys) {
-		this.apiKeys = apiKeys;
+	public void setTransaction(String transaction) {
+		this.transaction = transaction;
 	}
 
-	public String getPath() {
-		return path;
+	public String getTransactionInfo() {
+		return transactionInfo;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setTransactionInfo(String transactionInfo) {
+		this.transactionInfo = transactionInfo;
 	}
 }

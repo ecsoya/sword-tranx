@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.ecsoya.sword.tranx.config.BscscanConfig;
 import com.github.ecsoya.sword.tranx.domain.Bscscan;
+import com.github.ecsoya.sword.tranx.domain.TranxBase;
 import com.github.ecsoya.sword.tranx.domain.TranxBscscan;
 import com.github.ecsoya.sword.tranx.domain.TranxSymbol;
 import com.github.ecsoya.sword.tranx.service.ITranxBscscanService;
@@ -109,6 +110,11 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 			log.error("BscScan error", e);
 			return BLOCK_FAILED;
 		}
+		return null;
+	}
+
+	@Override
+	public TranxBase getTranxByHash(String hash) {
 		return null;
 	}
 }

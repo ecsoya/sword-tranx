@@ -1,6 +1,8 @@
 package com.github.ecsoya.sword.tranx.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Tranx for BscScan对象 tx_tranx_tronscan
@@ -130,6 +132,17 @@ public class TranxTronscan implements Serializable {
 
 	public Integer getDecimals() {
 		return decimals;
+	}
+
+	public BigDecimal getRealValue() {
+		if (amount == null) {
+			return null;
+		}
+		BigDecimal pow = BigDecimal.ONE;
+		if (decimals != null) {
+			pow = BigDecimal.valueOf(10).pow(decimals.intValue());
+		}
+		return BigDecimal.valueOf(amount).divide(pow, 6, RoundingMode.HALF_UP);
 	}
 
 }

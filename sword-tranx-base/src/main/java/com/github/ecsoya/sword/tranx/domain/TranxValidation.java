@@ -33,11 +33,21 @@ public class TranxValidation {
 		this.message = message;
 	}
 
+	public boolean isOk() {
+		return STATUS_OK == status;
+	}
+
+	@Override
+	public String toString() {
+		return "TranxValidation [status=" + status + ", message=" + message + "]";
+	}
+
 	public static TranxValidation ok() {
-		return new TranxValidation(STATUS_OK, null);
+		return new TranxValidation(STATUS_OK, "验证通过");
 	}
 
 	public static TranxValidation error(String message) {
 		return new TranxValidation(STATUS_ERROR, message);
 	}
+
 }
