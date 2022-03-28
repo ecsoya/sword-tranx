@@ -50,7 +50,7 @@ public class TranxTrc20 extends TranxBase implements Serializable {
 		this.amountStr = amountStr;
 		if (amountStr != null) {
 			try {
-				setAmount(Long.parseLong(amountStr.trim()));
+				setAmount(amountStr.trim());
 			} catch (NumberFormatException e) {
 			}
 		}

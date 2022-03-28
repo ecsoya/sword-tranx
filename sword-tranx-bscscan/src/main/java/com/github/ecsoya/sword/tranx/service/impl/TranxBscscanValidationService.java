@@ -22,7 +22,7 @@ public class TranxBscscanValidationService implements ITranxValidationService {
 			return TranxValidation.error("验证金额错误");
 		}
 		TranxBscscan tranx = bscscanService.selectTranxBscscanById(txHash);
-		if (tranx == null) {
+		if (tranx == null || symbol == null || !symbol.equalsIgnoreCase(tranx.getSymbol())) {
 			return TranxValidation.error("获取交易失败");
 		}
 		BigDecimal realValue = tranx.getRealValue();

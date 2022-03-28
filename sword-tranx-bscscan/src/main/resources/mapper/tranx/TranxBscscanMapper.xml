@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="timeStamp"    column="time_stamp"    />
         <result property="fromAddress"    column="from_address"    />
         <result property="toAddress"    column="to_address"    />
-        <result property="value"    column="value"    />
+        <result property="amount"    column="amount"    />
         <result property="gas"    column="gas"    />
         <result property="gasPrice"    column="gas_price"    />
         <result property="isError"    column="is_error"    />
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTranxBscscanVo">
-        select a.hash, a.block_number, a.time_stamp, a.from_address, a.to_address, a.value, a.gas, a.gas_price, a.is_error, a.txreceipt_status, a.contract_address, a.token, a.symbol, a.decimals
+        select a.hash, a.block_number, a.time_stamp, a.from_address, a.to_address, a.amount, a.gas, a.gas_price, a.is_error, a.txreceipt_status, a.contract_address, a.token, a.symbol, a.decimals
     
     </sql>
     
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timeStamp != null "> and a.time_stamp = #{timeStamp}</if>
             <if test="fromAddress != null  and fromAddress != ''"> and a.from_address = #{fromAddress}</if>
             <if test="toAddress != null  and toAddress != ''"> and a.to_address = #{toAddress}</if>
-            <if test="value != null "> and a.value = #{value}</if>
+            <if test="amount != null and amount != '' "> and a.amount = #{amount}</if>
             <if test="gas != null "> and a.gas = #{gas}</if>
             <if test="gasPrice != null "> and a.gas_price = #{gasPrice}</if>
             <if test="isError != null "> and a.is_error = #{isError}</if>
@@ -66,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timeStamp != null">time_stamp,</if>
             <if test="fromAddress != null">from_address,</if>
             <if test="toAddress != null">to_address,</if>
-            <if test="value != null">value,</if>
+            <if test="amount != null">amount,</if>
             <if test="gas != null">gas,</if>
             <if test="gasPrice != null">gas_price,</if>
             <if test="isError != null">is_error,</if>
@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timeStamp != null">#{timeStamp},</if>
             <if test="fromAddress != null">#{fromAddress},</if>
             <if test="toAddress != null">#{toAddress},</if>
-            <if test="value != null">#{value},</if>
+            <if test="amount != null">#{amount},</if>
             <if test="gas != null">#{gas},</if>
             <if test="gasPrice != null">#{gasPrice},</if>
             <if test="isError != null">#{isError},</if>
@@ -98,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timeStamp != null">time_stamp = #{timeStamp},</if>
             <if test="fromAddress != null">from_address = #{fromAddress},</if>
             <if test="toAddress != null">to_address = #{toAddress},</if>
-            <if test="value != null">value = #{value},</if>
+            <if test="amount != null">amount = #{amount},</if>
             <if test="gas != null">gas = #{gas},</if>
             <if test="gasPrice != null">gas_price = #{gasPrice},</if>
             <if test="isError != null">is_error = #{isError},</if>
@@ -117,7 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timeStamp != null">time_stamp = #{timeStamp},</if>
             <if test="fromAddress != null">from_address = #{fromAddress},</if>
             <if test="toAddress != null">to_address = #{toAddress},</if>
-            <if test="value != null">value = #{value},</if>
+            <if test="amount != null">amount = #{amount},</if>
             <if test="gas != null">gas = #{gas},</if>
             <if test="gasPrice != null">gas_price = #{gasPrice},</if>
             <if test="isError != null">is_error = #{isError},</if>

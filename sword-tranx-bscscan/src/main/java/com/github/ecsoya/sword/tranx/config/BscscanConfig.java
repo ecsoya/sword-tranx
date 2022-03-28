@@ -10,6 +10,13 @@ public class BscscanConfig {
 
 	private String[] apiKeys;
 
+	/**
+	 * tokentx: 查询代币交易
+	 * 
+	 * txlist: 查询BNB交易
+	 */
+	private String action = "tokentx";
+	
 	public String getBaseUrl() {
 		return baseUrl;
 	}
@@ -24,5 +31,13 @@ public class BscscanConfig {
 
 	public void setApiKeys(String[] apiKeys) {
 		this.apiKeys = apiKeys;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 }

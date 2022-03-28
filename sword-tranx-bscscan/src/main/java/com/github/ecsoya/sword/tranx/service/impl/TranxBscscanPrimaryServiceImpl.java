@@ -45,13 +45,14 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		log.info("BscScan: {}", TOKEN_BNB);
 		String baseUrl = config.getBaseUrl();
 		String[] apiKeys = config.getApiKeys();
-		return loadTranx(baseUrl, apiKeys, symbol);
+		String action = config.getAction();
+		return loadTranx(baseUrl, apiKeys, action, symbol);
 	}
 
-	private int loadTranx(String baseUrl, String[] apiKeys, TranxSymbol symbol) {
+	private int loadTranx(String baseUrl, String[] apiKeys, String action, TranxSymbol symbol) {
 		Long blockNumber = symbol.getBlockNumber();
 		for (String apiKey : apiKeys) {
-			Long newBlockNumber = loadTranx(blockNumber, baseUrl, apiKey, symbol);
+			Long newBlockNumber = loadTranx(blockNumber, baseUrl, apiKey, action, symbol);
 			if (BLOCK_FAILED.equals(newBlockNumber)) {
 				continue;
 			} else if (newBlockNumber == null) {
@@ -66,14 +67,18 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		return symbolService.updateTranxSymbol(symbol);
 	}
 
-	private Long loadTranx(Long blockNumber, String baseUrl, String apiKey, TranxSymbol symbol) {
+	private Long loadTranx(Long blockNumber, String baseUrl, String apiKey, String action, TranxSymbol symbol) {
 		if (symbol == null) {
 			return null;
 		}
 		String address = symbol.getAddress();
 		Map<String, String> params = new HashMap<>();
 		params.put("module", "account");
-		params.put("action", "txlist");
+		if (action != null && !action.equals("")) {
+			params.put("action", action);
+		} else {
+			params.put("action", "tokentx"); // tokentx
+		}
 		params.put("address", address);
 		if (blockNumber != null) {
 			params.put("startblock", blockNumber.toString());
@@ -89,9 +94,7 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 					Long block = null;
 					for (TranxBscscan tranx : result) {
 						if (symbol != null) {
-							tranx.setSymbol(symbol.getSymbol());
 							tranx.setToken(symbol.getToken());
-							tranx.setDecimals(symbol.getDecimals());
 						} else {
 							tranx.setToken(TOKEN_BNB);
 							tranx.setDecimals(BNB_DECIMALS);
@@ -115,6 +118,6 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 
 	@Override
 	public TranxBase getTranxByHash(String hash) {
-		return null;
+		return tranxBscscanService.selectTranxBscscanById(hash);
 	}
 }

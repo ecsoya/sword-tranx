@@ -14,25 +14,27 @@ public class TranxBase implements Serializable {
 	private String hash;
 
 	/** 代币 */
+	@JSONField(alternateNames = { "symbol", "tokenSymbol" })
 	private String symbol;
 
 	/** 精度 */
+	@JSONField(alternateNames = { "decimals", "tokenDecimal" })
 	private Integer decimals;
 
 	/** FORM */
-	@JSONField(alternateNames = { "from_address", "from" })
+	@JSONField(alternateNames = { "from_address", "fromAddress", "from" })
 	private String fromAddress;
 
 	/** TO */
-	@JSONField(alternateNames = { "to_address", "to" })
+	@JSONField(alternateNames = { "to_address", "toAddress", "to" })
 	private String toAddress;
 
 	/** Value */
 	@JSONField(alternateNames = { "amount", "value" })
-	private Long amount;
+	private String amount;
 
 	/** 合约地址 */
-	@JSONField(alternateNames = "contract_address")
+	@JSONField(alternateNames = { "contract_address", "contractAddress" })
 	private String contractAddress;
 
 	public String getHash() {
@@ -59,11 +61,11 @@ public class TranxBase implements Serializable {
 		this.decimals = decimals;
 	}
 
-	public Long getAmount() {
+	public String getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Long amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 
@@ -99,6 +101,6 @@ public class TranxBase implements Serializable {
 		if (decimals != null) {
 			pow = BigDecimal.valueOf(10).pow(decimals.intValue());
 		}
-		return BigDecimal.valueOf(amount).divide(pow, 6, RoundingMode.HALF_UP);
+		return new BigDecimal(amount).divide(pow, 6, RoundingMode.HALF_UP);
 	}
 }
