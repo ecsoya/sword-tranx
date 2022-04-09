@@ -69,7 +69,7 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 				TranxSymbol update = new TranxSymbol();
 				update.setSymbol(symbol.getSymbol());
 				update.setBlockNumber(start);
-				symbolService.updateTranxSymbol(symbol);
+				symbolService.updateTranxSymbol(update);
 			}
 
 			if (maxTries > 10) {
