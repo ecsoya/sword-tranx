@@ -18,6 +18,7 @@ public interface TranxSymbolMapper {
 	 * @return 支持账户
 	 */
 	public TranxSymbol selectTranxSymbolById(Long id);
+
 	public TranxSymbol selectTranxSymbolByKey(String key);
 
 	/**

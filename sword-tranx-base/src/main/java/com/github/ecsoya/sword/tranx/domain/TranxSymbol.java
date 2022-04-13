@@ -14,11 +14,11 @@ import org.apache.ibatis.type.Alias;
 @Alias("TranxSymbol")
 public class TranxSymbol implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long id;
 
 	private String key;
-	
+
 	/** symbol */
 	private String symbol;
 
@@ -33,7 +33,7 @@ public class TranxSymbol implements Serializable {
 
 	/** 区块高度 */
 	private Long blockNumber;
-	
+
 	private Integer confirms;
 
 	/** 状态 */

@@ -16,7 +16,7 @@ public class BscscanConfig {
 	 * txlist: 查询BNB交易
 	 */
 	private String action = "tokentx";
-	
+
 	public String getBaseUrl() {
 		return baseUrl;
 	}

@@ -8,7 +8,7 @@ public class TranxTrx {
 
 	/** 确认次数 */
 	private Integer confirmations;
-	
+
 	public String getHash() {
 		return hash;
 	}

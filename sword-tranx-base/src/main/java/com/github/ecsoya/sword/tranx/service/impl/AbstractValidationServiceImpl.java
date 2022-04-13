@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.ecsoya.sword.tranx.domain.TranxBase;
 import com.github.ecsoya.sword.tranx.domain.TranxSymbol;
 import com.github.ecsoya.sword.tranx.domain.TranxValidation;
-import com.github.ecsoya.sword.tranx.service.ITranxScanService;
 import com.github.ecsoya.sword.tranx.service.ITranxSymbolService;
 import com.github.ecsoya.sword.tranx.service.ITranxValidationService;
 
@@ -17,6 +16,8 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 	private ITranxSymbolService symbolService;
 
 	protected abstract TranxBase getTranxByHash(String txHash, String key);
+
+	protected abstract String getToken();
 
 	@Override
 	final public TranxValidation validateTransferIn(String key, String txHash, BigDecimal value, BigDecimal bounce) {
@@ -35,7 +36,7 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 			return TranxValidation.error("验证金额错误");
 		}
 		TranxSymbol token = symbolService.selectTranxSymbolByKey(key);
-		if (token == null || !ITranxScanService.TOKEN_TRX.equals(token.getToken())) {
+		if (token == null || !Objects.equals(getToken(), token.getToken())) {
 			return TranxValidation.error("验证链错误");
 		}
 		TranxBase tranx = getTranxByHash(txHash, null);

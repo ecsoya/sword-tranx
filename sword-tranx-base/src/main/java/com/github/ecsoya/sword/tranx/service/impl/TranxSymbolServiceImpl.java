@@ -30,7 +30,7 @@ public class TranxSymbolServiceImpl implements ITranxSymbolService {
 	public TranxSymbol selectTranxSymbolById(Long id) {
 		return tranxSymbolMapper.selectTranxSymbolById(id);
 	}
-	
+
 	@Override
 	public TranxSymbol selectTranxSymbolByKey(String key) {
 		return tranxSymbolMapper.selectTranxSymbolByKey(key);

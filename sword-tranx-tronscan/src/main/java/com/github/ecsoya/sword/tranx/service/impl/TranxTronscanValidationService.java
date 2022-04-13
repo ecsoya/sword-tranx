@@ -18,4 +18,9 @@ public class TranxTronscanValidationService extends AbstractValidationServiceImp
 	protected TranxBase getTranxByHash(String txHash, String key) {
 		return tranxScanService.getTranxByHash(txHash, key);
 	}
+
+	@Override
+	protected String getToken() {
+		return ITranxScanService.TOKEN_TRX;
+	}
 }

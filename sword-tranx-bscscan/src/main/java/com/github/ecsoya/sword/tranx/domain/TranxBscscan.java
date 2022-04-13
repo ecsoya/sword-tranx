@@ -31,7 +31,7 @@ public class TranxBscscan extends TranxBase implements Serializable {
 
 	/** Status */
 	private Integer txreceiptStatus;
-	
+
 	private String token;
 
 	public void setBlockNumber(Long blockNumber) {

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.ecsoya.sword.tranx.domain.TranxBase;
 import com.github.ecsoya.sword.tranx.service.ITranxBscscanService;
+import com.github.ecsoya.sword.tranx.service.ITranxScanService;
 import com.github.ecsoya.sword.tranx.service.ITranxValidationService;
 
 @Service(ITranxValidationService.BSCSCAN)
@@ -16,5 +17,10 @@ public class TranxBscscanValidationService extends AbstractValidationServiceImpl
 	@Override
 	protected TranxBase getTranxByHash(String txHash, String key) {
 		return bscscanService.selectTranxBscscanById(txHash);
+	}
+
+	@Override
+	protected String getToken() {
+		return ITranxScanService.TOKEN_BNB;
 	}
 }
