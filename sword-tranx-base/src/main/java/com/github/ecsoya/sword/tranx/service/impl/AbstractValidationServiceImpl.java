@@ -56,7 +56,7 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 		if (bounce != null) {
 			realValue = realValue.subtract(bounce);
 		}
-		if (realValue.doubleValue() >= value.doubleValue()) {
+		if (realValue.doubleValue() == value.doubleValue()) {
 			return TranxValidation.ok();
 		}
 		return TranxValidation.error("验证金额失败");
