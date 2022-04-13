@@ -55,13 +55,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTranxSymbolVo"/>
         from tx_tranx_symbol a
         <include refid="selectTranxSymbolJoins"/>
-        where key = #{key} limit 1
+        where `key` = #{key} limit 1
     </select>
         
     <insert id="insertTranxSymbol" parameterType="com.github.ecsoya.sword.tranx.domain.TranxSymbol">
         insert into tx_tranx_symbol
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="key != null">key,</if>
+            <if test="key != null">`key`,</if>
             <if test="symbol != null and symbol != ''">symbol,</if>
             <if test="address != null and address != ''">address,</if>
             <if test="token != null">token,</if>
@@ -91,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateTranxSymbol" parameterType="com.github.ecsoya.sword.tranx.domain.TranxSymbol">
         update tx_tranx_symbol
         <trim prefix="SET" suffixOverrides=",">
-            <if test="key != null">key = #{key},</if>
+            <if test="key != null">`key` = #{key},</if>
             <if test="symbol != null and symbol != ''">symbol = #{symbol},</if>
             <if test="address != null and address != ''">address = #{address},</if>
             <if test="token != null">token = #{token},</if>
