@@ -1,6 +1,7 @@
 package com.github.ecsoya.sword.tranx.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,9 @@ public class TranxBscscanValidationService implements ITranxValidationService {
 	private ITranxBscscanService bscscanService;
 	@Autowired
 	private ITranxSymbolService symbolService;
+
 	@Override
-	public TranxValidation validateTranx(String key, String txHash, BigDecimal value, BigDecimal bounce) {
+	public TranxValidation validateTransferIn(String key, String txHash, BigDecimal value, BigDecimal bounce) {
 		if (value == null || value.doubleValue() <= 0) {
 			return TranxValidation.error("验证金额错误");
 		}
@@ -30,8 +32,13 @@ public class TranxBscscanValidationService implements ITranxValidationService {
 			return TranxValidation.error("验证链错误");
 		}
 		TranxBscscan tranx = bscscanService.selectTranxBscscanById(txHash);
-		if (tranx == null || key == null || !key.equalsIgnoreCase(tranx.getSymbol())) {
+		if (tranx == null) {
 			return TranxValidation.error("获取交易失败");
+
+		}
+		String address = token.getAddress();
+		if (!Objects.equals(address, tranx.getToAddress())) {
+			return TranxValidation.error("转账地址验证失败");
 		}
 		BigDecimal realValue = tranx.getRealValue();
 		if (realValue == null || realValue.doubleValue() <= 0) {

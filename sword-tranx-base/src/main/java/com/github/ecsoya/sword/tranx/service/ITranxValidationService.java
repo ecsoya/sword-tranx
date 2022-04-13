@@ -18,5 +18,5 @@ public interface ITranxValidationService {
 	 * @param bounce 允许误差
 	 * @return result
 	 */
-	public TranxValidation validateTranx(String key, String txHash, BigDecimal value, BigDecimal bounce);
+	public TranxValidation validateTransferIn(String key, String txHash, BigDecimal value, BigDecimal bounce);
 }
