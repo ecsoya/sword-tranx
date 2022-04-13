@@ -39,15 +39,15 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 		if (token == null || !Objects.equals(getToken(), token.getToken())) {
 			return TranxValidation.error("验证链错误");
 		}
-		TranxBase tranx = getTranxByHash(txHash, null);
+		TranxBase tranx = getTranxByHash(txHash, key);
 		if (tranx == null) {
 			return TranxValidation.error("获取交易失败");
 		}
 		String address = token.getAddress();
-		if (!Objects.equals(address, tranx.getToAddress())) {
+		if (!equalsIgnoreCase(address, tranx.getToAddress())) {
 			return TranxValidation.error("转入地址验证失败");
 		}
-		if (safely && !Objects.equals(fromAddress, tranx.getFromAddress())) {
+		if (safely && !equalsIgnoreCase(fromAddress, tranx.getFromAddress())) {
 			return TranxValidation.error("转出地址验证失败");
 		}
 		BigDecimal realValue = tranx.getRealValue();
@@ -61,5 +61,12 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 			return TranxValidation.ok();
 		}
 		return TranxValidation.error("验证金额失败");
+	}
+	
+	private boolean equalsIgnoreCase(String v1, String v2) {
+		if (v1 == null) {
+			return v2 == null;
+		}
+		return v1.equalsIgnoreCase(v2);
 	}
 }

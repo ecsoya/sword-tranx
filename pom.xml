@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.ecsoya.sword.tranx</groupId>
 	<artifactId>sword-tranx</artifactId>
-	<version>v0.0.8</version>
+	<version>v0.0.9</version>
 	<packaging>pom</packaging>
 	<name>sword-tranx</name>
 	<properties>
