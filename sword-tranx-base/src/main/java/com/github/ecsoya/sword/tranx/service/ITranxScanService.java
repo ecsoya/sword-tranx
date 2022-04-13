@@ -12,5 +12,5 @@ public interface ITranxScanService {
 
 	public int scanTranx(TranxSymbol symbol);
 
-	public TranxBase getTranxByHash(String hash);
+	public TranxBase getTranxByHash(String hash, String symbolKey);
 }

@@ -25,19 +25,19 @@ public class TranxTronscanValidationService implements ITranxValidationService {
 	private ITranxSymbolService symbolService;
 
 	@Override
-	public TranxValidation validateTranx(String symbol, String txHash, BigDecimal value, BigDecimal bounce) {
+	public TranxValidation validateTranx(String key, String txHash, BigDecimal value, BigDecimal bounce) {
 		if (value == null || value.doubleValue() <= 0) {
 			return TranxValidation.error("验证金额错误");
 		}
-		TranxSymbol token = symbolService.selectTranxSymbolById(symbol);
+		TranxSymbol token = symbolService.selectTranxSymbolByKey(key);
 		if (token == null || !ITranxScanService.TOKEN_TRX.equals(token.getToken())) {
 			return TranxValidation.error("验证链错误");
 		}
-		TranxBase tranx = tranxScanService.getTranxByHash(txHash);
+		TranxBase tranx = tranxScanService.getTranxByHash(txHash, null);
 		if (tranx == null) {
 			return TranxValidation.error("获取交易失败");
 		}
-		if (symbol != null && !symbol.equalsIgnoreCase(tranx.getSymbol())) {
+		if (key != null && !key.equalsIgnoreCase(tranx.getSymbol())) {
 			return TranxValidation.error("验证币种失败");
 		}
 		String address = token.getAddress();

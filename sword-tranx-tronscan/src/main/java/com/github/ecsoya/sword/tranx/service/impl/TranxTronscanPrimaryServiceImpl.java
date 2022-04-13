@@ -108,7 +108,7 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 						tranxTronscanService.insertTranxTronscan(tranx);
 
 						// if (Objects.equals(symbol.getAddress(), tranx.getToAddress())) {
-						loadTrc20(tranx.getHash());
+						loadTrc20(tranx.getHash(), symbol);
 						// }
 					}
 				}
@@ -121,9 +121,10 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 		}
 	}
 
-	private void loadTrc20(String hash) {
+	private void loadTrc20(String hash, TranxSymbol symbol) {
 		log.info("TrxTranx: {}", hash);
 		try {
+			Integer confirms = symbol != null ? symbol.getConfirms() : null;
 			String baseUrl = config.getBaseUrl();
 			String path = config.getTransactionInfo();
 			Map<String, String> params = new HashMap<>();
@@ -132,6 +133,12 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 			log.info("TrxTranx: {}", json);
 			TranxTrx trx = JSON.parseObject(json, TranxTrx.class);
 			if (trx != null && trx.getTrc20TransferInfo() != null) {
+				if (confirms != null) {
+					Integer confirmations = trx.getConfirmations();
+					if (confirmations == null || confirmations < confirms) {
+						return;
+					}
+				}
 				TranxTrc20[] transfers = trx.getTrc20TransferInfo();
 				for (TranxTrc20 transfer : transfers) {
 					transfer.setHash(hash);
@@ -144,7 +151,7 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 	}
 
 	@Override
-	public TranxBase getTranxByHash(String hash) {
+	public TranxBase getTranxByHash(String hash, String symbolKey) {
 		if (hash == null || hash.equals("")) {
 			return null;
 		}
@@ -152,7 +159,8 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 		if (value != null) {
 			return value;
 		}
-		loadTrc20(hash);
+		TranxSymbol symbol = symbolService.selectTranxSymbolByKey(symbolKey);
+		loadTrc20(hash, symbol);
 		return tranxTrc20Service.selectTranxTrc20ById(hash);
 	}
 

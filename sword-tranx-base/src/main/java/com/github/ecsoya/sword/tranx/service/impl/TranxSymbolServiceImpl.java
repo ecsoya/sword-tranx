@@ -27,8 +27,13 @@ public class TranxSymbolServiceImpl implements ITranxSymbolService {
 	 * @return 支持账户
 	 */
 	@Override
-	public TranxSymbol selectTranxSymbolById(String symbol) {
-		return tranxSymbolMapper.selectTranxSymbolById(symbol);
+	public TranxSymbol selectTranxSymbolById(Long id) {
+		return tranxSymbolMapper.selectTranxSymbolById(id);
+	}
+	
+	@Override
+	public TranxSymbol selectTranxSymbolByKey(String key) {
+		return tranxSymbolMapper.selectTranxSymbolByKey(key);
 	}
 
 	/**
@@ -71,7 +76,7 @@ public class TranxSymbolServiceImpl implements ITranxSymbolService {
 	 * @return 结果
 	 */
 	@Override
-	public int deleteTranxSymbolById(String symbol) {
-		return tranxSymbolMapper.deleteTranxSymbolById(symbol);
+	public int deleteTranxSymbolById(Long id) {
+		return tranxSymbolMapper.deleteTranxSymbolById(id);
 	}
 }

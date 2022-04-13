@@ -84,6 +84,7 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 			params.put("startblock", blockNumber.toString());
 		}
 		params.put("apikey", apiKey);
+		Integer confirms = symbol.getConfirms();
 		try {
 			String json = HttpClientUtil.doGet(baseUrl, params);
 			log.info("BscScan: {}", json);
@@ -98,6 +99,12 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 						} else {
 							tranx.setToken(TOKEN_BNB);
 							tranx.setDecimals(BNB_DECIMALS);
+						}
+						if (confirms != null) {
+							Integer myConfirm = tranx.getConfirmations();
+							if (myConfirm == null || myConfirm < confirms) {
+								return null;
+							}
 						}
 						tranxBscscanService.insertTranxBscscan(tranx);
 						if (block == null) {
@@ -117,7 +124,7 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 	}
 
 	@Override
-	public TranxBase getTranxByHash(String hash) {
+	public TranxBase getTranxByHash(String hash, String symbolKey) {
 		return tranxBscscanService.selectTranxBscscanById(hash);
 	}
 }

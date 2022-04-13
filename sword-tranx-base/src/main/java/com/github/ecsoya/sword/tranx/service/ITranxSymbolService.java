@@ -17,7 +17,8 @@ public interface ITranxSymbolService {
 	 * @param symbol 支持账户ID
 	 * @return 支持账户
 	 */
-	public TranxSymbol selectTranxSymbolById(String symbol);
+	public TranxSymbol selectTranxSymbolById(Long id);
+	public TranxSymbol selectTranxSymbolByKey(String key);
 
 	/**
 	 * 查询支持账户列表
@@ -49,5 +50,5 @@ public interface ITranxSymbolService {
 	 * @param symbol 支持账户ID
 	 * @return 结果
 	 */
-	public int deleteTranxSymbolById(String symbol);
+	public int deleteTranxSymbolById(Long id);
 }

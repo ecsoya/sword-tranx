@@ -14,7 +14,11 @@ import org.apache.ibatis.type.Alias;
 @Alias("TranxSymbol")
 public class TranxSymbol implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private Long id;
 
+	private String key;
+	
 	/** symbol */
 	private String symbol;
 
@@ -29,6 +33,8 @@ public class TranxSymbol implements Serializable {
 
 	/** 区块高度 */
 	private Long blockNumber;
+	
+	private Integer confirms;
 
 	/** 状态 */
 	private Integer status;
@@ -109,6 +115,30 @@ public class TranxSymbol implements Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public Integer getConfirms() {
+		return confirms;
+	}
+
+	public void setConfirms(Integer confirms) {
+		this.confirms = confirms;
 	}
 
 }

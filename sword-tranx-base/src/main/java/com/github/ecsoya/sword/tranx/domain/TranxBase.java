@@ -37,6 +37,9 @@ public class TranxBase implements Serializable {
 	@JSONField(alternateNames = { "contract_address", "contractAddress" })
 	private String contractAddress;
 
+	/** 确认次数 */
+	private Integer confirmations;
+
 	public String getHash() {
 		return hash;
 	}
@@ -102,5 +105,13 @@ public class TranxBase implements Serializable {
 			pow = BigDecimal.valueOf(10).pow(decimals.intValue());
 		}
 		return new BigDecimal(amount).divide(pow, 6, RoundingMode.HALF_UP);
+	}
+
+	public Integer getConfirmations() {
+		return confirmations;
+	}
+
+	public void setConfirmations(Integer confirmations) {
+		this.confirmations = confirmations;
 	}
 }

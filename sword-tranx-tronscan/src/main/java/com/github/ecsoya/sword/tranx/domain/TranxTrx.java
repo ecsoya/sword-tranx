@@ -6,6 +6,9 @@ public class TranxTrx {
 
 	private TranxTrc20[] trc20TransferInfo;
 
+	/** 确认次数 */
+	private Integer confirmations;
+	
 	public String getHash() {
 		return hash;
 	}
@@ -20,5 +23,13 @@ public class TranxTrx {
 
 	public void setTrc20TransferInfo(TranxTrc20[] trc20TransferInfo) {
 		this.trc20TransferInfo = trc20TransferInfo;
+	}
+
+	public Integer getConfirmations() {
+		return confirmations;
+	}
+
+	public void setConfirmations(Integer confirmations) {
+		this.confirmations = confirmations;
 	}
 }

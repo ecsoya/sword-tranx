@@ -12,11 +12,11 @@ public interface ITranxValidationService {
 	/**
 	 * Validate the txHash with given price and value.
 	 * 
-	 * @param symbol 币种
+	 * @param key 币种
 	 * @param txHash 交易哈希
 	 * @param value  验证金额
 	 * @param bounce 允许误差
 	 * @return result
 	 */
-	public TranxValidation validateTranx(String symbol, String txHash, BigDecimal value, BigDecimal bounce);
+	public TranxValidation validateTranx(String key, String txHash, BigDecimal value, BigDecimal bounce);
 }
