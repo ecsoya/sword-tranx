@@ -1,13 +1,19 @@
 package com.github.ecsoya.sword.tranx.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.github.ecsoya.sword.tranx.config.TronscanConfig;
@@ -123,8 +129,30 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 
 	private void loadTrc20(String hash, TranxSymbol symbol) {
 		log.info("TrxTranx: {}", hash);
+		Integer confirms = symbol != null ? symbol.getConfirms() : null;
+		loadTranxByHash(hash, confirms).forEach(transfer -> {
+			if (transfer instanceof TranxTrc20) {
+				tranxTrc20Service.insertTranxTrc20((TranxTrc20) transfer);
+			}
+		});
+	}
+
+	@Override
+	public TranxBase getTranxByHash(String hash, String symbolKey) {
+		if (hash == null || hash.equals("")) {
+			return null;
+		}
+		return tranxTrc20Service.selectTranxTrc20ById(hash);
+	}
+
+	@Override
+	public List<TranxBase> loadTranxByHash(String hash, Integer confirmations, String... addresses) {
+		if (StringUtils.isEmpty(hash)) {
+			return Collections.emptyList();
+		}
+		log.info("TrxTranx: {}", hash);
 		try {
-			Integer confirms = symbol != null ? symbol.getConfirms() : null;
+			List<String> filterAddresses = addresses != null ? Arrays.asList(addresses) : Collections.emptyList();
 			String baseUrl = config.getBaseUrl();
 			String path = config.getTransactionInfo();
 			Map<String, String> params = new HashMap<>();
@@ -133,35 +161,38 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 			log.info("TrxTranx: {}", json);
 			TranxTrx trx = JSON.parseObject(json, TranxTrx.class);
 			if (trx != null && trx.getTrc20TransferInfo() != null) {
-				if (confirms != null) {
-					Integer confirmations = trx.getConfirmations();
-					if (confirmations == null || confirmations < confirms) {
-						return;
+				if (confirmations != null) {
+					Integer myConfirmations = trx.getConfirmations();
+					if (myConfirmations == null || myConfirmations < confirmations) {
+						return Collections.emptyList();
 					}
 				}
+				List<TranxBase> result = new ArrayList<>();
 				TranxTrc20[] transfers = trx.getTrc20TransferInfo();
 				for (TranxTrc20 transfer : transfers) {
 					transfer.setHash(hash);
-					tranxTrc20Service.insertTranxTrc20(transfer);
+					if (containsAddress(filterAddresses, transfer.getFromAddress())
+							|| containsAddress(filterAddresses, transfer.getToAddress())) {
+						result.add(transfer);
+					}
 				}
+				return result;
 			}
 		} catch (Exception e) {
 			log.error("TrxTranx error", e);
 		}
+		return Collections.emptyList();
 	}
 
-	@Override
-	public TranxBase getTranxByHash(String hash, String symbolKey) {
-		if (hash == null || hash.equals("")) {
-			return null;
+	private boolean containsAddress(List<String> filterAddresses, String address) {
+		if (filterAddresses == null || filterAddresses.isEmpty()) {
+			return true;
 		}
-		TranxTrc20 value = tranxTrc20Service.selectTranxTrc20ById(hash);
-		if (value != null) {
-			return value;
+		if (address == null) {
+			return false;
 		}
-		TranxSymbol symbol = symbolService.selectTranxSymbolByKey(symbolKey);
-		loadTrc20(hash, symbol);
-		return tranxTrc20Service.selectTranxTrc20ById(hash);
+		List<String> addresses = filterAddresses.parallelStream().map(a -> a.toLowerCase())
+				.collect(Collectors.toList());
+		return addresses.contains(address.toLowerCase());
 	}
-
 }

@@ -1,6 +1,7 @@
 package com.github.ecsoya.sword.tranx.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -125,6 +126,16 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 
 	@Override
 	public TranxBase getTranxByHash(String hash, String symbolKey) {
-		return tranxBscscanService.selectTranxBscscanById(hash);
+		TranxBscscan tranx = tranxBscscanService.selectTranxBscscanById(hash);
+		if (tranx != null) {
+			return tranx;
+		}
+		return tranx;
+	}
+	
+	@Override
+	public List<TranxBase> loadTranxByHash(String hash, Integer confirmations, String... addresses) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

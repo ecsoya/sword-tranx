@@ -15,10 +15,10 @@ public interface ITranxValidationService {
 	 * @param key    币种
 	 * @param txHash 交易哈希
 	 * @param value  验证金额
-	 * @param bounce 允许误差
+	 * @param scale  允许误差
 	 * @return result
 	 */
-	public TranxValidation validateTransferIn(String key, String txHash, BigDecimal value, BigDecimal bounce);
+	public TranxValidation validateTransferIn(String key, String txHash, BigDecimal value, Integer scale);
 
 	/**
 	 * Validate the txHash with given price and value.
@@ -26,9 +26,22 @@ public interface ITranxValidationService {
 	 * @param key    币种
 	 * @param txHash 交易哈希
 	 * @param value  验证金额
-	 * @param bounce 允许误差
+	 * @param scale  允许误差
 	 * @return result
 	 */
 	public TranxValidation validateTransferInSafely(String key, String txHash, String fromAddress, BigDecimal value,
-			BigDecimal bounce);
+			Integer scale);
+
+	/**
+	 * Validate transfer.
+	 *
+	 * @param txHash      the tx hash
+	 * @param fromAddress the from address
+	 * @param toAddress   the to address
+	 * @param value       the value
+	 * @param scale       the scale
+	 * @return the tranx validation
+	 */
+	public TranxValidation validateTransfer(String txHash, String fromAddress, String toAddress, BigDecimal value,
+			Integer scale);
 }
