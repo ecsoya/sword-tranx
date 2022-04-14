@@ -17,6 +17,8 @@ public class BscscanConfig {
 	 */
 	private String action = "tokentx";
 
+	private String contractAddress = "0x12AED1022F52D03B139FA3D6afB02Fc095668C0B";
+
 	public String getBaseUrl() {
 		return baseUrl;
 	}
@@ -39,5 +41,13 @@ public class BscscanConfig {
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+
+	public String getContractAddress() {
+		return contractAddress;
+	}
+
+	public void setContractAddress(String contractAddress) {
+		this.contractAddress = contractAddress;
 	}
 }

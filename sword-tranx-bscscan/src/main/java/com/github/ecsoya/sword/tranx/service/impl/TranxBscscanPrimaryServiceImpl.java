@@ -1,5 +1,8 @@
 package com.github.ecsoya.sword.tranx.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.github.ecsoya.sword.tranx.config.BscscanConfig;
 import com.github.ecsoya.sword.tranx.domain.Bscscan;
@@ -132,10 +136,58 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		}
 		return tranx;
 	}
-	
+
 	@Override
 	public List<TranxBase> loadTranxByHash(String hash, Integer confirmations, String... addresses) {
-		// TODO Auto-generated method stub
-		return null;
+		if (StringUtils.isEmpty(hash) || addresses == null || addresses.length == 0) {
+			return Collections.emptyList();
+		}
+		List<TranxBase> tranxs = new ArrayList<>();
+		String baseUrl = config.getBaseUrl();
+		String[] apiKeys = config.getApiKeys();
+		String action = config.getAction();
+		String contractAddress = config.getContractAddress();
+		Arrays.asList(addresses).forEach(address -> {
+			if (!tranxs.isEmpty()) {
+				return;
+			}
+			Map<String, String> params = new HashMap<>();
+			params.put("module", "account");
+			if (action != null && !action.equals("")) {
+				params.put("action", action);
+			} else {
+				params.put("action", "tokentx"); // tokentx
+			}
+			params.put("address", address);
+			params.put("sort", "desc");
+			params.put("apikey", apiKeys[0]);
+			if (contractAddress != null) {
+				params.put("contractaddress", contractAddress);
+			}
+			Integer confirms = confirmations;
+			try {
+				String json = HttpClientUtil.doGet(baseUrl, params);
+				log.info("BscScan: {}", json);
+				Bscscan res = Bscscan.parse(json);
+				if (res != null && res.isOk()) {
+					TranxBscscan[] result = res.getResult();
+					if (result != null) {
+						for (TranxBscscan tranx : result) {
+							if (confirms != null && tranx.getConfirmations() != null
+									&& confirms > tranx.getConfirmations()) {
+								continue;
+							}
+							if (Objects.equals(hash, tranx.getHash())) {
+								tranxs.add(tranx);
+								break;
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				log.error("BscScan error", e);
+			}
+		});
+		return tranxs;
 	}
 }

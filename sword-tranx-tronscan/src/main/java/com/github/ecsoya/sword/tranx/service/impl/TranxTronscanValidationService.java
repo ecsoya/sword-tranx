@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.github.ecsoya.sword.tranx.domain.TranxBase;
 import com.github.ecsoya.sword.tranx.service.ITranxScanService;
 import com.github.ecsoya.sword.tranx.service.ITranxValidationService;
 
@@ -18,7 +17,7 @@ public class TranxTronscanValidationService extends AbstractValidationServiceImp
 	protected String getToken() {
 		return ITranxScanService.TOKEN_TRX;
 	}
-	
+
 	@Override
 	protected ITranxScanService getTranxScanService() {
 		return tranxScanService;
