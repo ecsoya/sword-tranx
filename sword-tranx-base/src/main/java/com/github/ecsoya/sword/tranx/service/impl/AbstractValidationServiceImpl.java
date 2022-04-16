@@ -1,6 +1,7 @@
 package com.github.ecsoya.sword.tranx.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 
@@ -87,7 +88,8 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 			return TranxValidation.error("验证金额失败");
 		}
 		if (scale != null && scale >= 0) {
-			if (realValue.setScale(scale).doubleValue() == value.setScale(scale).doubleValue()) {
+			if (realValue.setScale(scale, RoundingMode.HALF_DOWN).doubleValue() == value
+					.setScale(scale, RoundingMode.HALF_DOWN).doubleValue()) {
 				return TranxValidation.ok();
 			}
 		} else {
