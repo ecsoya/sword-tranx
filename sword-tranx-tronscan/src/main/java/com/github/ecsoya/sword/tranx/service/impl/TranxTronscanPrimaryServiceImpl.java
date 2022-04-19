@@ -160,7 +160,7 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 			String json = HttpClientUtil.doGet(baseUrl + path, params);
 			log.info("TrxTranx: {}", json);
 			TranxTrx trx = JSON.parseObject(json, TranxTrx.class);
-			if (trx != null && trx.getTrc20TransferInfo() != null) {
+			if (trx != null && trx.isSuccess() && trx.getTrc20TransferInfo() != null) {
 				if (confirmations != null) {
 					Integer myConfirmations = trx.getConfirmations();
 					if (myConfirmations == null || myConfirmations < confirmations) {

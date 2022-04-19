@@ -1,5 +1,7 @@
 package com.github.ecsoya.sword.tranx.domain;
 
+import java.util.Objects;
+
 public class TranxTrx {
 
 	private String hash;
@@ -8,6 +10,10 @@ public class TranxTrx {
 
 	/** 确认次数 */
 	private Integer confirmations;
+	
+	private Boolean confirmed;
+	
+	private String contractRet;
 
 	public String getHash() {
 		return hash;
@@ -31,5 +37,25 @@ public class TranxTrx {
 
 	public void setConfirmations(Integer confirmations) {
 		this.confirmations = confirmations;
+	}
+
+	public Boolean getConfirmed() {
+		return confirmed;
+	}
+
+	public void setConfirmed(Boolean confirmed) {
+		this.confirmed = confirmed;
+	}
+
+	public String getContractRet() {
+		return contractRet;
+	}
+
+	public void setContractRet(String contractRet) {
+		this.contractRet = contractRet;
+	}
+	
+	public boolean isSuccess() {
+		return confirmed != null && Boolean.TRUE.equals(confirmed) && Objects.equals("SUCCESS", contractRet);
 	}
 }

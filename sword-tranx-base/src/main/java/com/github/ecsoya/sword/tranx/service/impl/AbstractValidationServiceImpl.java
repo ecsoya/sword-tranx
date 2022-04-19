@@ -69,7 +69,7 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 				}
 			}
 		}
-		return TranxValidation.error("验证金额失败");
+		return TranxValidation.error("验证交易失败");
 	}
 
 	private TranxValidation validateTransfer(TranxBase tranx, String fromAddress, String toAddress, BigDecimal value,
@@ -97,7 +97,7 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 				return TranxValidation.ok();
 			}
 		}
-		return TranxValidation.error("验证金额失败");
+		return TranxValidation.error("验证交易失败");
 	}
 
 	private TranxValidation validateTransferIn(String key, String txHash, String fromAddress, BigDecimal value,
