@@ -191,7 +191,7 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 		if (address == null) {
 			return false;
 		}
-		List<String> addresses = filterAddresses.parallelStream().map(a -> a.toLowerCase())
+		List<String> addresses = filterAddresses.parallelStream().filter(Objects::nonNull).map(a -> a.toLowerCase())
 				.collect(Collectors.toList());
 		return addresses.contains(address.toLowerCase());
 	}
