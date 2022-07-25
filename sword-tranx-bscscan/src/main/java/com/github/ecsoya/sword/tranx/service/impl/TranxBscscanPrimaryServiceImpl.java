@@ -67,7 +67,7 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 			}
 		}
 		TranxSymbol update = new TranxSymbol();
-		update.setSymbol(symbol.getSymbol());
+		update.setId(symbol.getId());
 		update.setBlockNumber(blockNumber);
 		return symbolService.updateTranxSymbol(update);
 	}
