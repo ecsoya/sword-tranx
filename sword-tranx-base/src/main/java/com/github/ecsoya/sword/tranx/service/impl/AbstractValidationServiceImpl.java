@@ -38,14 +38,14 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 	}
 
 	@Override
-	public TranxValidation validateTransfer(String txHash, String fromAddress, String toAddress, BigDecimal value,
-			Integer scale) {
-		return validateTransfer(txHash, fromAddress, toAddress, value, scale, !StringUtils.isEmpty(fromAddress),
+	public TranxValidation validateTransfer(String txHash, String symbol, String fromAddress, String toAddress,
+			BigDecimal value, Integer scale) {
+		return validateTransfer(txHash, symbol, fromAddress, toAddress, value, scale, !StringUtils.isEmpty(fromAddress),
 				!StringUtils.isEmpty(toAddress));
 	}
 
-	private TranxValidation validateTransfer(String txHash, String fromAddress, String toAddress, BigDecimal value,
-			Integer scale, boolean checkFrom, boolean checkTo) {
+	private TranxValidation validateTransfer(String txHash, String symbol, String fromAddress, String toAddress,
+			BigDecimal value, Integer scale, boolean checkFrom, boolean checkTo) {
 		if (value == null || value.doubleValue() <= 0) {
 			return TranxValidation.error("验证金额错误");
 		}
@@ -55,13 +55,13 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 		}
 		TranxBase tranx = tranxScanService.getTranxByHash(txHash, null);
 		if (tranx != null) {
-			return validateTransfer(tranx, fromAddress, toAddress, value, scale, checkFrom, checkTo);
+			return validateTransfer(tranx, symbol, fromAddress, toAddress, value, scale, checkFrom, checkTo);
 		} else {
 			List<TranxBase> list = tranxScanService.loadTranxByHash(txHash, DEFAULT_CONFIRMATIONS, fromAddress,
 					toAddress);
 			if (!list.isEmpty()) {
 				for (TranxBase tranxBase : list) {
-					TranxValidation result = validateTransfer(tranxBase, fromAddress, toAddress, value, scale,
+					TranxValidation result = validateTransfer(tranxBase, symbol, fromAddress, toAddress, value, scale,
 							checkFrom, checkTo);
 					if (result.isOk()) {
 						return result;
@@ -72,10 +72,13 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 		return TranxValidation.error("验证交易失败");
 	}
 
-	private TranxValidation validateTransfer(TranxBase tranx, String fromAddress, String toAddress, BigDecimal value,
-			Integer scale, boolean checkFrom, boolean checkTo) {
+	private TranxValidation validateTransfer(TranxBase tranx, String symbol, String fromAddress, String toAddress,
+			BigDecimal value, Integer scale, boolean checkFrom, boolean checkTo) {
 		if (tranx == null) {
 			return TranxValidation.error("获取交易失败");
+		}
+		if (!StringUtils.isEmpty(symbol) && !symbol.equalsIgnoreCase(tranx.getSymbol())) {
+			return TranxValidation.error("币种不匹配");
 		}
 		if (checkTo && !equalsIgnoreCase(toAddress, tranx.getToAddress())) {
 			return TranxValidation.error("转入地址验证失败");
@@ -109,8 +112,9 @@ public abstract class AbstractValidationServiceImpl implements ITranxValidationS
 		if (token == null || !Objects.equals(getToken(), token.getToken())) {
 			return TranxValidation.error("验证链错误");
 		}
+		String symbol = token.getSymbol();
 		String toAddress = token.getAddress();
-		return validateTransfer(txHash, fromAddress, toAddress, value, scale, safely, true);
+		return validateTransfer(txHash, symbol, fromAddress, toAddress, value, scale, safely, true);
 	}
 
 	private boolean equalsIgnoreCase(String v1, String v2) {

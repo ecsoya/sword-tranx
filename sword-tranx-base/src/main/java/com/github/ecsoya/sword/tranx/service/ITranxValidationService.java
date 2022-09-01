@@ -36,12 +36,13 @@ public interface ITranxValidationService {
 	 * Validate transfer.
 	 *
 	 * @param txHash      the tx hash
+	 * @param symbol TODO
 	 * @param fromAddress the from address
 	 * @param toAddress   the to address
 	 * @param value       the value
 	 * @param scale       the scale
 	 * @return the tranx validation
 	 */
-	public TranxValidation validateTransfer(String txHash, String fromAddress, String toAddress, BigDecimal value,
-			Integer scale);
+	public TranxValidation validateTransfer(String txHash, String symbol, String fromAddress, String toAddress,
+			BigDecimal value, Integer scale);
 }
