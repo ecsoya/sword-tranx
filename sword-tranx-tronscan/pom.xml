@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.github.ecsoya.sword.tranx</groupId>
 		<artifactId>sword-tranx</artifactId>
-		<version>v0.1.6</version>
+		<version>v0.1.7</version>
 	</parent>
 	<artifactId>sword-tranx-tronscan</artifactId>
 	<name>sword-tranx-tronscan</name>

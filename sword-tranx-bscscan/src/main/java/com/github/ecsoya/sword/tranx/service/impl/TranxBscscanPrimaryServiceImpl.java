@@ -147,7 +147,7 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		String[] apiKeys = config.getApiKeys();
 		String action = config.getAction();
 		String contractAddress = config.getContractAddress();
-		Arrays.asList(addresses).forEach(address -> {
+		Arrays.asList(addresses).stream().filter(Objects::nonNull).distinct().forEach(address -> {
 			if (!tranxs.isEmpty()) {
 				return;
 			}
@@ -177,7 +177,7 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 									&& confirms > tranx.getConfirmations()) {
 								continue;
 							}
-							if (Objects.equals(hash, tranx.getHash())) {
+							if (hash.equalsIgnoreCase(tranx.getHash())) {
 								tranxs.add(tranx);
 								break;
 							}
