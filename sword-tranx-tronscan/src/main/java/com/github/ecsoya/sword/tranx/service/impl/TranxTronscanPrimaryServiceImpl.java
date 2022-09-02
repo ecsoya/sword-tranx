@@ -93,7 +93,9 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 		Map<String, String> params = new HashMap<>();
 		params.put("count", "true");
 		params.put("limit", Integer.toString(PAGE_LIMIT));
-		params.put("start", start.toString());
+		if (start != null) {
+			params.put("start", start.toString());
+		}
 		params.put("address", address);
 		try {
 			String json = HttpClientUtil.doGet(baseUrl + path, params);
@@ -117,8 +119,8 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 						loadTrc20(tranx.getHash(), symbol);
 						// }
 					}
+					return Long.valueOf(result.length);
 				}
-				return Long.valueOf(result.length);
 			}
 			return null;
 		} catch (Exception e) {
