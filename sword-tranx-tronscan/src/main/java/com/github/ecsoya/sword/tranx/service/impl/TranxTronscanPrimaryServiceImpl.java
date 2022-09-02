@@ -57,7 +57,7 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 		if (symbol == null || !Objects.equals(TOKEN_TRX, symbol.getToken())) {
 			return 0;
 		}
-		log.info("TronScan: {}", TOKEN_TRX);
+		log.info("TronScan: {}", symbol);
 		String baseUrl = config.getBaseUrl();
 		String path = config.getTransaction();
 		log.info("TronScan: {}", baseUrl + path);
@@ -86,16 +86,14 @@ public class TranxTronscanPrimaryServiceImpl implements ITranxScanService {
 	}
 
 	private Long loadTranx(Long start, String baseUrl, String path, TranxSymbol symbol) {
-		if (symbol == null) {
+		if (symbol == null || start == null) {
 			return null;
 		}
 		String address = symbol.getAddress();
 		Map<String, String> params = new HashMap<>();
 		params.put("count", "true");
 		params.put("limit", Integer.toString(PAGE_LIMIT));
-		if (start != null) {
-			params.put("start", start.toString());
-		}
+		params.put("start", start.toString());
 		params.put("address", address);
 		try {
 			String json = HttpClientUtil.doGet(baseUrl + path, params);

@@ -47,17 +47,18 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		if (symbol == null || !Objects.equals(TOKEN_BNB, symbol.getToken())) {
 			return 0;
 		}
-		log.info("BscScan: {}", TOKEN_BNB);
+		log.info("BscScan: {}", symbol);
 		String baseUrl = config.getBaseUrl();
 		String[] apiKeys = config.getApiKeys();
 		String action = config.getAction();
-		return loadTranx(baseUrl, apiKeys, action, symbol);
+		String contractAddress = config.getContractAddress();
+		return loadTranx(baseUrl, contractAddress, apiKeys, action, symbol);
 	}
 
-	private int loadTranx(String baseUrl, String[] apiKeys, String action, TranxSymbol symbol) {
+	private int loadTranx(String baseUrl, String contractAddress, String[] apiKeys, String action, TranxSymbol symbol) {
 		Long blockNumber = symbol.getBlockNumber();
 		for (String apiKey : apiKeys) {
-			Long newBlockNumber = loadTranx(blockNumber, baseUrl, apiKey, action, symbol);
+			Long newBlockNumber = loadTranx(blockNumber, baseUrl, contractAddress, apiKey, action, symbol);
 			if (BLOCK_FAILED.equals(newBlockNumber)) {
 				continue;
 			} else if (newBlockNumber == null) {
@@ -72,7 +73,8 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		return symbolService.updateTranxSymbol(update);
 	}
 
-	private Long loadTranx(Long blockNumber, String baseUrl, String apiKey, String action, TranxSymbol symbol) {
+	private Long loadTranx(Long blockNumber, String baseUrl, String contractAddress, String apiKey, String action,
+			TranxSymbol symbol) {
 		if (symbol == null) {
 			return null;
 		}
@@ -89,6 +91,9 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 			params.put("startblock", blockNumber.toString());
 		}
 		params.put("apikey", apiKey);
+		if (!StringUtils.isEmpty(contractAddress)) {
+			params.put("contractAddress", contractAddress);
+		}
 		Integer confirms = symbol.getConfirms();
 		try {
 			String json = HttpClientUtil.doGet(baseUrl, params);
@@ -108,9 +113,10 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 						if (confirms != null) {
 							Integer myConfirm = tranx.getConfirmations();
 							if (myConfirm == null || myConfirm < confirms) {
-								return null;
+								continue;
 							}
 						}
+						log.info("BscScan: insert={}", tranx.getHash());
 						tranxBscscanService.insertTranxBscscan(tranx);
 						if (block == null) {
 							block = tranx.getBlockNumber();
