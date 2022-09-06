@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="key"    column="key"    />
         <result property="symbol"    column="symbol"    />
         <result property="address"    column="address"    />
+        <result property="contractAddress"    column="contract_address"    />
         <result property="token"    column="token"    />
         <result property="decimals"    column="decimals"    />
         <result property="blockNumber"    column="block_number"    />
@@ -20,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTranxSymbolVo">
-        select a.id, a.key, a.symbol, a.address, a.token, a.decimals, a.block_number, a.confirms, a.status, a.create_time, a.update_time, a.remark 
+        select a.id, a.key, a.symbol, a.address, a.contract_address, a.token, a.decimals, a.block_number, a.confirms, a.status, a.create_time, a.update_time, a.remark 
     
     </sql>
     
@@ -36,6 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="key != null  and key != ''"> and a.key = #{key}</if>
             <if test="symbol != null  and symbol != ''"> and a.symbol = #{symbol}</if>
             <if test="address != null  and address != ''"> and a.address = #{address}</if>
+            <if test="contractAddress != null  and contractAddress != ''"> and a.contract_address = #{contractAddress}</if>
             <if test="token != null  and token != ''"> and a.token = #{token}</if>
             <if test="decimals != null "> and a.decimals = #{decimals}</if>
             <if test="blockNumber != null "> and a.block_number = #{blockNumber}</if>
@@ -64,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="key != null">`key`,</if>
             <if test="symbol != null and symbol != ''">symbol,</if>
             <if test="address != null and address != ''">address,</if>
+            <if test="contractAddress != null and contractAddress != ''">contract_address,</if>
             <if test="token != null">token,</if>
             <if test="decimals != null">decimals,</if>
             <if test="blockNumber != null">block_number,</if>
@@ -77,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="key != null">#{key},</if>
             <if test="symbol != null and symbol != ''">#{symbol},</if>
             <if test="address != null and address != ''">#{address},</if>
+            <if test="contractAddress != null and contractAddress != ''">#{contractAddress},</if>
             <if test="token != null">#{token},</if>
             <if test="decimals != null">#{decimals},</if>
             <if test="blockNumber != null">#{blockNumber},</if>
@@ -94,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="key != null">`key` = #{key},</if>
             <if test="symbol != null and symbol != ''">symbol = #{symbol},</if>
             <if test="address != null and address != ''">address = #{address},</if>
+            <if test="contractAddress != null and contractAddress != ''">contract_address = #{contractAddress},</if>
             <if test="token != null">token = #{token},</if>
             <if test="decimals != null">decimals = #{decimals},</if>
             <if test="blockNumber != null">block_number = #{blockNumber},</if>

@@ -51,14 +51,13 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		String baseUrl = config.getBaseUrl();
 		String[] apiKeys = config.getApiKeys();
 		String action = config.getAction();
-		String contractAddress = config.getContractAddress();
-		return loadTranx(baseUrl, contractAddress, apiKeys, action, symbol);
+		return loadTranx(baseUrl, apiKeys, action, symbol);
 	}
 
-	private int loadTranx(String baseUrl, String contractAddress, String[] apiKeys, String action, TranxSymbol symbol) {
+	private int loadTranx(String baseUrl, String[] apiKeys, String action, TranxSymbol symbol) {
 		Long blockNumber = symbol.getBlockNumber();
 		for (String apiKey : apiKeys) {
-			Long newBlockNumber = loadTranx(blockNumber, baseUrl, contractAddress, apiKey, action, symbol);
+			Long newBlockNumber = loadTranx(blockNumber, baseUrl, apiKey, action, symbol);
 			if (BLOCK_FAILED.equals(newBlockNumber)) {
 				continue;
 			} else if (newBlockNumber == null) {
@@ -73,8 +72,7 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		return symbolService.updateTranxSymbol(update);
 	}
 
-	private Long loadTranx(Long blockNumber, String baseUrl, String contractAddress, String apiKey, String action,
-			TranxSymbol symbol) {
+	private Long loadTranx(Long blockNumber, String baseUrl, String apiKey, String action, TranxSymbol symbol) {
 		if (symbol == null) {
 			return null;
 		}
@@ -91,9 +89,6 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 			params.put("startblock", blockNumber.toString());
 		}
 		params.put("apikey", apiKey);
-		if (!StringUtils.isEmpty(contractAddress)) {
-			params.put("contractAddress", contractAddress);
-		}
 		Integer confirms = symbol.getConfirms();
 		try {
 			String json = HttpClientUtil.doGet(baseUrl, params);
@@ -152,7 +147,7 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 		String baseUrl = config.getBaseUrl();
 		String[] apiKeys = config.getApiKeys();
 		String action = config.getAction();
-		String contractAddress = config.getContractAddress();
+//		String contractAddress = config.getContractAddress();
 		Arrays.asList(addresses).stream().filter(Objects::nonNull).distinct().forEach(address -> {
 			if (!tranxs.isEmpty()) {
 				return;
@@ -167,9 +162,9 @@ public class TranxBscscanPrimaryServiceImpl implements ITranxScanService {
 			params.put("address", address);
 			params.put("sort", "desc");
 			params.put("apikey", apiKeys[0]);
-			if (contractAddress != null) {
-				params.put("contractaddress", contractAddress);
-			}
+//			if (contractAddress != null) {
+//				params.put("contractaddress", contractAddress);
+//			}
 			Integer confirms = confirmations;
 			try {
 				String json = HttpClientUtil.doGet(baseUrl, params);

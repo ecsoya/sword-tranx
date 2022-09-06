@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -44,6 +45,7 @@ public class HttpClientUtil {
 				}
 			}
 			URI uri = builder.build();
+			System.out.println(String.format("GET: %s", uri));
 			// 创建http GET请求
 			HttpGet httpGet = new HttpGet(uri);
 			// 执行请求
@@ -65,6 +67,15 @@ public class HttpClientUtil {
 			}
 		}
 		return resultString;
+	}
+
+	private static String randomIp() {
+		Random random = new Random();
+		int a = random.nextInt(255);
+		int b = random.nextInt(255);
+		int c = random.nextInt(255);
+		int d = random.nextInt(255);
+		return a + "." + b + "." + c + "." + d;
 	}
 
 	/**

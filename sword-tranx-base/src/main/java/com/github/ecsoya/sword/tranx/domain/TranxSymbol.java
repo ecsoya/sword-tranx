@@ -24,6 +24,8 @@ public class TranxSymbol implements Serializable {
 
 	/** 地址 */
 	private String address;
+	/** 合约地址 */
+	private String contractAddress;
 
 	/** 代币 */
 	private String token;
@@ -139,6 +141,20 @@ public class TranxSymbol implements Serializable {
 
 	public void setConfirms(Integer confirms) {
 		this.confirms = confirms;
+	}
+
+	@Override
+	public String toString() {
+		return "TranxSymbol [symbol=" + symbol + ", address=" + address + ", token=" + token + ", decimals=" + decimals
+				+ ", blockNumber=" + blockNumber + ", confirms=" + confirms + "]";
+	}
+
+	public String getContractAddress() {
+		return contractAddress;
+	}
+
+	public void setContractAddress(String contractAddress) {
+		this.contractAddress = contractAddress;
 	}
 
 }
